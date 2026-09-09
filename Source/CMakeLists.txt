@@ -19,8 +19,13 @@ endif()
 
 message(STATUS "Building Dexed in formats: ${DEXED_JUCE_FORMATS}")
 
+set(DEXED_PLUGIN_VERSION "1.0.1")
+if(BUILD_ID MATCHES "^([0-9]+\\.[0-9]+\\.[0-9]+)")
+    set(DEXED_PLUGIN_VERSION "${CMAKE_MATCH_1}")
+endif()
+
 juce_add_plugin("${BaseTargetName}"
-        VERSION "1.0.1"
+        VERSION "${DEXED_PLUGIN_VERSION}"
         ICON_BIG "../assets/ui/dexedIcon.png"
         ICON_SMALL "../assets/ui/dexedIcon.png"
         COMPANY_NAME "Digital Suburban"

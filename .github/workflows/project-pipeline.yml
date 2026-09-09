@@ -113,6 +113,14 @@ jobs:
     if: github.ref_type == 'branch' && !cancelled() && !contains(needs.*.result, 'failure')
     needs: [ build-linux, build-linux-arm64 ]
     steps:
+      - name: "Ensure 'latest' release exists"
+        run: |
+          if ! gh release view latest >/dev/null 2>&1; then
+            gh release create latest --title "Dexed Latest" --notes "Latest Dexed build"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: "Upload to latest"
         uses: surge-synthesizer/sst-githubactions/upload-to-release@main
         with:
