@@ -114,12 +114,13 @@ jobs:
     needs: [ build-linux, build-linux-arm64 ]
     steps:
       - name: "Ensure 'latest' release exists"
-        run: |
-          if ! gh release view latest >/dev/null 2>&1; then
-            gh release create latest --title "Dexed Latest" --notes "Latest Dexed build"
-          fi
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          draft: false
+          prerelease: false
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: "Upload to latest"
         uses: surge-synthesizer/sst-githubactions/upload-to-release@main
