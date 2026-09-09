@@ -19,7 +19,7 @@ endif()
 
 message(STATUS "Building Dexed in formats: ${DEXED_JUCE_FORMATS}")
 
-set(DEXED_PLUGIN_VERSION "1.0.1")
+set(DEXED_PLUGIN_VERSION "${PROJECT_VERSION}")
 if(BUILD_ID MATCHES "^([0-9]+\\.[0-9]+\\.[0-9]+)")
     set(DEXED_PLUGIN_VERSION "${CMAKE_MATCH_1}")
 endif()
@@ -47,6 +47,22 @@ if(NOT DEXED_SKIP_CLAP)
     clap_juce_extensions_plugin(TARGET ${BaseTargetName}
             CLAP_ID "com.digital-suburban.dexed"
             CLAP_FEATURES instrument FM DX7)
+endif()
+
+if(BUILD_ID)
+    set(DEXED_FULL_VERSION "${BUILD_ID}")
+else()
+    set(DEXED_FULL_VERSION "${DEXED_PLUGIN_VERSION}")
+endif()
+
+set(vst3_target "${BaseTargetName}_VST3")
+if(TARGET ${vst3_target})
+    add_custom_command(TARGET ${vst3_target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND}
+                "-DVERSION=${DEXED_FULL_VERSION}"
+                "-DMODULEINFO=$<TARGET_FILE_DIR:${vst3_target}>/../Resources/moduleinfo.json"
+                -P "${CMAKE_CURRENT_SOURCE_DIR}/patch_moduleinfo_version.cmake"
+        VERBATIM)
 endif()
 
 juce_generate_juce_header(${PROJECT_NAME})
