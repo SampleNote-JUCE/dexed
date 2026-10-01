@@ -151,22 +151,33 @@ TODO - msfa
 * Better Amplitude Modulation
 * Accurate live operator level envelope updates
 
+# Cloning for the first time
+
+Install Git, then run the following commands from the directory where you want to
+keep the source code:
+
+```sh
+git clone --recurse-submodules https://github.com/SampleNote-JUCE/dexed.git
+cd dexed
+```
+
+The `--recurse-submodules` option downloads the required dependencies, including
+JUCE, VST3/CLAP support, and tuning libraries, along with their nested submodules.
+Use Git to clone the repository; GitHub's **Download ZIP** does not include these
+submodules.
+
+If you already cloned the repository without `--recurse-submodules`, run this
+from inside your `dexed` directory before building:
+
+```sh
+git submodule update --init --recursive
+```
+
 # How to build
 
-Clone Dexed from github
-
-```
-~ $ git clone https://github.com/asb2m10/dexed.git
-```
-
-Dexed has several submodules it now depends on, including VST3/CLAP and a library to support non standard tuning. After you clone your first step is
-
-```
-~ $ cd dexed
-~/dexed $ git submodule update --init --recursive
-```
-
-Then you crate the cmake build files that are will be created in the build directory. On that build you can trigger your favorite IDE or simply use `--build` cmake option.
+After cloning and initializing the submodules as described above, create the
+CMake build files in the build directory. You can then use your favorite IDE or
+the CMake `--build` option.
 
 ```
 ~/dexed $ mkdir build
